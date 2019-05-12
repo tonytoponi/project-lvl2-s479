@@ -1,0 +1,42 @@
+{
+  "name": "gendiff-s479",
+  "version": "0.0.10",
+  "description": "Tutorial project 2",
+  "author": "Anton Zhilkin",
+  "license": "ISC",
+  "keywords": [
+    "gendiff"
+  ],
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonytoponi/project-lvl2-s479.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tonytoponi/project-lvl2-s479/issues"
+  },
+  "homepage": "https://github.com/tonytoponi/project-lvl2-s479#readme",
+  "dependencies": {
+    "commander": "^2.20.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-pipeline-operator": "^7.3.2",
+    "@babel/preset-env": "^7.4.3",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
