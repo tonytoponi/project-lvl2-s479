@@ -8,3 +8,5 @@ installApp:
 	npm link
 lint:
 	npx eslint .
+test:
+	npm run test
