@@ -1,4 +1,4 @@
-import compareJson from './modules/generateJsonDifference';
+import compareJson from './modules/genDiff';
 
 const app = require('commander');
 

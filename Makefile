@@ -10,3 +10,5 @@ lint:
 	npx eslint .
 test:
 	npm run test
+watch:
+	npm run testWatch

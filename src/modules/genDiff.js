@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { resolve } = require('path');
 const _ = require('lodash');
 
 const generateLine = (obj1, obj2, key) => {
@@ -15,8 +16,8 @@ const generateLine = (obj1, obj2, key) => {
 };
 
 const getJsonDifference = (firstPath, secondPath) => {
-  const firstFileContent = JSON.parse(fs.readFileSync(firstPath, 'utf8'));
-  const secondFileContent = JSON.parse(fs.readFileSync(secondPath, 'utf8'));
+  const firstFileContent = JSON.parse(fs.readFileSync(resolve(firstPath), 'utf8'));
+  const secondFileContent = JSON.parse(fs.readFileSync(resolve(secondPath), 'utf8'));
   const firstFileContentKeys = Object.keys(firstFileContent);
   const secondFileContentKeys = Object.keys(secondFileContent);
   const addedKeys = _.difference(secondFileContentKeys, firstFileContentKeys);
