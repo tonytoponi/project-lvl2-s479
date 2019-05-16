@@ -1,6 +1,6 @@
 {
   "name": "gendiff-s479",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Tutorial project 2",
   "author": "Anton Zhilkin",
   "license": "ISC",
@@ -29,7 +29,8 @@
   "homepage": "https://github.com/tonytoponi/project-lvl2-s479#readme",
   "dependencies": {
     "commander": "^2.20.0",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "js-yaml": "^3.13.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

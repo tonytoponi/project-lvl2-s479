@@ -1,23 +1,39 @@
-const fs = require('fs');
-const { resolve } = require('path');
+import { parseJson, parseYaml } from './parsers';
+
 const _ = require('lodash');
+const { extname } = require('path');
+
+const filesParsers = [
+  {
+    check: (arg1, arg2) => extname(arg1) === '.json' && extname(arg2) === '.json',
+    parse: parseJson,
+  },
+  {
+    check: (arg1, arg2) => extname(arg1) === '.yaml' && extname(arg2) === '.yaml',
+    parse: parseYaml,
+  },
+];
+
+const getfilesParser = (arg1, arg2) => filesParsers.find(({ check }) => check(arg1, arg2));
+
+const makeline = (obj, key, sign = '') => (sign === '' ? `\n  ${key}: ${obj[key]}` : `\n  ${sign} ${key}: ${obj[key]}`);
 
 const generateLine = (obj1, obj2, key) => {
   if (_.has(obj1, key)) {
     if (_.has(obj2, key)) {
       if (obj1[key] === obj2[key]) {
-        return `\n  ${key}: ${obj1[key]}`;
+        return makeline(obj1, key);
       }
-      return `\n  + ${key}: ${obj2[key]}\n  - ${key}: ${obj1[key]}`;
+      return `${makeline(obj2, key, '+')}${makeline(obj1, key, '-')}`;
     }
-    return `\n  - ${key}: ${obj1[key]}`;
+    return makeline(obj1, key, '-');
   }
-  return `\n  + ${key}: ${obj2[key]}`;
+  return makeline(obj2, key, '+');
 };
 
-const getJsonDifference = (firstPath, secondPath) => {
-  const firstFileContent = JSON.parse(fs.readFileSync(resolve(firstPath), 'utf8'));
-  const secondFileContent = JSON.parse(fs.readFileSync(resolve(secondPath), 'utf8'));
+const genDiff = (firstPath, secondPath) => {
+  const { parse } = getfilesParser(firstPath, firstPath);
+  const [firstFileContent, secondFileContent] = parse(firstPath, secondPath);
   const firstFileContentKeys = Object.keys(firstFileContent);
   const secondFileContentKeys = Object.keys(secondFileContent);
   const addedKeys = _.difference(secondFileContentKeys, firstFileContentKeys);
@@ -29,4 +45,4 @@ const getJsonDifference = (firstPath, secondPath) => {
   return `{${result.join('')}\n}`;
 };
 
-export default getJsonDifference;
+export default genDiff;

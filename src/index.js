@@ -1,9 +1,10 @@
 import compareJson from './modules/genDiff';
+import { version } from '../package.json';
 
 const app = require('commander');
 
 app
-  .version(process.env.npm_package_version)
+  .version(version)
   .arguments('<firstConfig> <secondConfig>')
   .description('Compares two configuration files and shows a difference.')
   .action((firstConfig, secondConfig) => console.log(compareJson(firstConfig, secondConfig)));
