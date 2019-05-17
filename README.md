@@ -9,3 +9,7 @@ JSON file
 YAML files
 
 [![asciicast](https://asciinema.org/a/8vhwFg6S6jVfcqb7CHsSyaav7.svg)](https://asciinema.org/a/8vhwFg6S6jVfcqb7CHsSyaav7)
+
+INI files
+
+[![asciicast](https://asciinema.org/a/BzIYoMzLGzLqYX907NqCzVM4x.svg)](https://asciinema.org/a/BzIYoMzLGzLqYX907NqCzVM4x)
