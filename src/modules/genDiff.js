@@ -1,4 +1,4 @@
-import { parseJson, parseYaml } from './parsers';
+import { parseJson, parseYaml, parseIni } from './parsers';
 
 const _ = require('lodash');
 const { extname } = require('path');
@@ -11,6 +11,10 @@ const filesParsers = [
   {
     check: (arg1, arg2) => extname(arg1) === '.yaml' && extname(arg2) === '.yaml',
     parse: parseYaml,
+  },
+  {
+    check: (arg1, arg2) => extname(arg1) === '.ini' && extname(arg2) === '.ini',
+    parse: parseIni,
   },
 ];
 
