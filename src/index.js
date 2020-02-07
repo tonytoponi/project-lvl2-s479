@@ -1,14 +1,20 @@
-import compareJson from './modules/genDiff';
+import getParser from './modules/parsers';
+import renderLine from './modules/renderer';
 
-const app = require('commander');
-const { version } = require('../package.json');
+const _ = require('lodash');
 
-app
-  .version(version)
-  .arguments('<firstConfig> <secondConfig>')
-  .description('Compares two configuration files and shows a difference.')
-  .action((firstConfig, secondConfig) => console.log(compareJson(firstConfig, secondConfig)));
-app
-  .option('-f, --format [type]', 'Output format');
+const genDiff = (firstPath, secondPath) => {
+  const parse = getParser(firstPath, firstPath);
+  const [firstFileContent, secondFileContent] = parse(firstPath, secondPath);
+  const firstFileContentKeys = Object.keys(firstFileContent);
+  const secondFileContentKeys = Object.keys(secondFileContent);
+  const addedKeys = _.difference(secondFileContentKeys, firstFileContentKeys);
+  const contentKeys = [...firstFileContentKeys, ...addedKeys];
+  const uniqContentKeys = _.uniq(contentKeys);
+  const result = uniqContentKeys.reduce(
+    (acc, key) => [...acc, renderLine(firstFileContent, secondFileContent, key)], [],
+  );
+  return `{${result.join('')}\n}`;
+};
 
-export default app;
+export default genDiff;

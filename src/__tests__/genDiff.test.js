@@ -1,4 +1,4 @@
-import genDiff from '../modules/genDiff';
+import genDiff from '..';
 
 const fs = require('fs');
 const path = require('path');
@@ -27,7 +27,7 @@ const testdata = [
 ];
 
 test.each(testdata)(
-  'Should work with next files(%o, %o)',
+  'Should work with next files(%p, %p)',
   (a, b, expected) => {
     expect(genDiff(a, b)).toBe(expected);
   },
