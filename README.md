@@ -13,3 +13,7 @@ YAML files
 INI files
 
 [![asciicast](https://asciinema.org/a/BzIYoMzLGzLqYX907NqCzVM4x.svg)](https://asciinema.org/a/BzIYoMzLGzLqYX907NqCzVM4x)
+
+Recursive files
+
+[![asciicast](https://asciinema.org/a/yZEuIRA5MI8EwddM7QeSwttla.svg)](https://asciinema.org/a/yZEuIRA5MI8EwddM7QeSwttla)
