@@ -1,20 +1,12 @@
-import getParser from './modules/parsers';
-import renderLine from './modules/renderer';
+import parse from './modules/parser';
+import build from './modules/diffAstBuilder';
+import render from './modules/renderer';
 
-const _ = require('lodash');
-
-const genDiff = (firstPath, secondPath) => {
-  const parse = getParser(firstPath, firstPath);
-  const [firstFileContent, secondFileContent] = parse(firstPath, secondPath);
-  const firstFileContentKeys = Object.keys(firstFileContent);
-  const secondFileContentKeys = Object.keys(secondFileContent);
-  const addedKeys = _.difference(secondFileContentKeys, firstFileContentKeys);
-  const contentKeys = [...firstFileContentKeys, ...addedKeys];
-  const uniqContentKeys = _.uniq(contentKeys);
-  const result = uniqContentKeys.reduce(
-    (acc, key) => [...acc, renderLine(firstFileContent, secondFileContent, key)], [],
-  );
-  return `{${result.join('')}\n}`;
+const genDiff = (firstFilePath, secondFilePath) => {
+  const [firstFile, secondFile] = parse(firstFilePath, secondFilePath);
+  const diff = build(firstFile, secondFile);
+  const renderedDiff = render(diff);
+  return renderedDiff;
 };
 
 export default genDiff;
