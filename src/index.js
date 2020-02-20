@@ -1,5 +1,5 @@
 import parse from './modules/parser';
-import build from './modules/diffBuilder';
+import build from './modules/diffAstBuilder';
 import render from './modules/renderer';
 
 const genDiff = (firstFilePath, secondFilePath) => {
