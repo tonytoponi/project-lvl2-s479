@@ -12,22 +12,55 @@ const generateTestData = (path1, path2, resultPath, isRelative = false) => {
   return result;
 };
 
-const testdata = [
-  generateTestData('/case1/file1.json', '/case1/file2.json', '/case1/result.txt'),
-  generateTestData('/case2/file1.json', '/case2/file2.json', '/case2/result.txt'),
-  generateTestData('/case4/file1.json', '/case4/file2.json', '/case4/result.txt'),
-  generateTestData('/case5/file1.yaml', '/case5/file2.yaml', '/case5/result.txt'),
-  generateTestData('/case6/file1.yaml', '/case6/file2.yaml', '/case6/result.txt'),
-  generateTestData('/case7/file1.ini', '/case7/file2.ini', '/case7/result.txt'),
-  generateTestData(
-    './src/__tests__/__fixtures__/case1/file1.json',
-    './src/__tests__/__fixtures__/case1/file2.json',
-    '/case1/result.txt', true,
-  ),
-];
+const RelativePathFiles = [
+  [
+    './src/__tests__/__fixtures__/Plain/file1.json',
+    './src/__tests__/__fixtures__/Plain/file2.json',
+    './Plain/result.txt', true,
+  ],
+].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
 
-test.each(testdata)(
-  'Should work with next files(%p, %p)',
+const emptyFiles = [
+  ['/Empty/file1.json', '/Empty/file2.json', '/Empty/result.txt'],
+  ['/Empty/file1.yaml', '/Empty/file2.yaml', '/Empty/result.txt'],
+  ['/Empty/file1.ini', '/Empty/file2.ini', '/Empty/result.txt'],
+].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
+
+const plainFiles = [
+  ['/Plain/file1.json', '/Plain/file2.json', 'Plain/result.txt'],
+  ['/Plain/file1.yaml', '/Plain/file2.yaml', '/Plain/result.txt'],
+  ['/Plain/file1.ini', '/Plain/file2.ini', '/Plain/result.txt'],
+].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
+
+const recusiveFiles = [
+  ['/Recursive/file1.json', '/Recursive/file2.json', '/Recursive/result.txt'],
+  ['/Recursive/file1.yaml', '/Recursive/file2.yaml', '/Recursive/result.txt'],
+  ['/Recursive/file1.ini', '/Recursive/file2.ini', '/Recursive/result.txt'],
+].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
+
+test.each(RelativePathFiles)(
+  'Should work with relative paths to files(%p, %p)',
+  (a, b, expected) => {
+    expect(genDiff(a, b)).toBe(expected);
+  },
+);
+
+test.each(emptyFiles)(
+  'Should work with empty files(%p, %p)',
+  (a, b, expected) => {
+    expect(genDiff(a, b)).toBe(expected);
+  },
+);
+
+test.each(plainFiles)(
+  'Should work with plain files(%p, %p)',
+  (a, b, expected) => {
+    expect(genDiff(a, b)).toBe(expected);
+  },
+);
+
+test.each(recusiveFiles)(
+  'Should work with recusive files(%p, %p)',
   (a, b, expected) => {
     expect(genDiff(a, b)).toBe(expected);
   },
