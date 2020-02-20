@@ -6,6 +6,8 @@ publish:
 	npm publish --dry-run.
 installApp:
 	npm link
+removeApp:
+	npm unlink
 lint:
 	npx eslint .
 test:
