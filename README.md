@@ -17,3 +17,7 @@ INI files
 Recursive files
 
 [![asciicast](https://asciinema.org/a/yZEuIRA5MI8EwddM7QeSwttla.svg)](https://asciinema.org/a/yZEuIRA5MI8EwddM7QeSwttla)
+
+Plain files
+
+[![asciicast](https://asciinema.org/a/zktELxwDb9J071uy6Zq8ek5ZQ.svg)](https://asciinema.org/a/zktELxwDb9J071uy6Zq8ek5ZQ)
