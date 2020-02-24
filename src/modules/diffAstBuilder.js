@@ -1,5 +1,4 @@
-const _ = require('lodash');
-
+import _ from 'lodash';
 
 const actions = [
   {
@@ -29,7 +28,7 @@ const actions = [
   {
     check: ([, v2]) => typeof v2 === 'undefined',
     process: ([key, oldValue]) => ({
-      status: 'deleted',
+      status: 'removed',
       key,
       oldValue,
     }),
@@ -37,7 +36,7 @@ const actions = [
   {
     check: ([v1, v2]) => !Object.is(v1, v2),
     process: ([key, oldValue, newValue]) => ({
-      status: 'edited',
+      status: 'updated',
       key,
       oldValue,
       newValue,
