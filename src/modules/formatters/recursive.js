@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
 const stringify = (key, value, depth, sign) => {
   if (_.isObject(value)) {
@@ -24,10 +24,10 @@ const renderNode = (node, depth) => {
   if (status === 'added') {
     return stringify(key, newValue, depth, '+');
   }
-  if (status === 'deleted') {
+  if (status === 'removed') {
     return stringify(key, oldValue, depth, '-');
   }
-  if (status === 'edited') {
+  if (status === 'updated') {
     return [stringify(key, oldValue, depth, '-'), (stringify(key, newValue, depth, '+'))];
   }
   return undefined;

@@ -1,7 +1,7 @@
-const yaml = require('js-yaml');
-const ini = require('ini');
-const fs = require('fs');
-const { resolve, extname } = require('path');
+import yaml from 'js-yaml';
+import ini from 'ini';
+import fs from 'fs';
+import { resolve, extname } from 'path';
 
 const filesParsers = [
   {
