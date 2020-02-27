@@ -14,10 +14,14 @@ INI files
 
 [![asciicast](https://asciinema.org/a/BzIYoMzLGzLqYX907NqCzVM4x.svg)](https://asciinema.org/a/BzIYoMzLGzLqYX907NqCzVM4x)
 
-Recursive files
+Recursive format report
 
 [![asciicast](https://asciinema.org/a/yZEuIRA5MI8EwddM7QeSwttla.svg)](https://asciinema.org/a/yZEuIRA5MI8EwddM7QeSwttla)
 
-Plain files
+Plain format report
 
 [![asciicast](https://asciinema.org/a/zktELxwDb9J071uy6Zq8ek5ZQ.svg)](https://asciinema.org/a/zktELxwDb9J071uy6Zq8ek5ZQ)
+
+Json format report
+
+[![asciicast](https://asciinema.org/a/XFwSC2eKMIq6UhivdzU4W6JiM.svg)](https://asciinema.org/a/XFwSC2eKMIq6UhivdzU4W6JiM)
