@@ -16,32 +16,38 @@ const relativePathFiles = [
   [
     './src/__tests__/__fixtures__/Simple/file1.json',
     './src/__tests__/__fixtures__/Simple/file2.json',
-    './Simple/result.txt', true,
+    './Result/simpleDiff.txt', true,
   ],
 ].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
 
 const emptyFiles = [
-  ['/Empty/file1.json', '/Empty/file2.json', '/Empty/result.txt'],
-  ['/Empty/file1.yaml', '/Empty/file2.yaml', '/Empty/result.txt'],
-  ['/Empty/file1.ini', '/Empty/file2.ini', '/Empty/result.txt'],
+  ['/Empty/file1.json', '/Empty/file2.json', '/Result/emptyDiff.txt'],
+  ['/Empty/file1.yaml', '/Empty/file2.yaml', '/Result/emptyDiff.txt'],
+  ['/Empty/file1.ini', '/Empty/file2.ini', '/Result/emptyDiff.txt'],
 ].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
 
 const SimpleFiles = [
-  ['/Simple/file1.json', '/Simple/file2.json', '/Simple/result.txt'],
-  ['/Simple/file1.yaml', '/Simple/file2.yaml', '/Simple/result.txt'],
-  ['/Simple/file1.ini', '/Simple/file2.ini', '/Simple/result.txt'],
+  ['/Simple/file1.json', '/Simple/file2.json', '/Result/simpleDiff.txt'],
+  ['/Simple/file1.yaml', '/Simple/file2.yaml', '/Result/simpleDiff.txt'],
+  ['/Simple/file1.ini', '/Simple/file2.ini', '/Result/simpleDiff.txt'],
 ].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
 
-const recusiveFiles = [
-  ['/Recursive/file1.json', '/Recursive/file2.json', '/Recursive/result.txt'],
-  ['/Recursive/file1.yaml', '/Recursive/file2.yaml', '/Recursive/result.txt'],
-  ['/Recursive/file1.ini', '/Recursive/file2.ini', '/Recursive/result.txt'],
+const recusiveReportFiles = [
+  ['/Complex/file1.json', '/Complex/file2.json', '/Result/recursiveDiff.txt'],
+  ['/Complex/file1.yaml', '/Complex/file2.yaml', '/Result/recursiveDiff.txt'],
+  ['/Complex/file1.ini', '/Complex/file2.ini', '/Result/recursiveDiff.txt'],
 ].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
 
-const plainFiles = [
-  ['/Plain/file1.json', '/Plain/file2.json', '/Plain/result.txt'],
-  ['/Plain/file1.yaml', '/Plain/file2.yaml', '/Plain/result.txt'],
-  ['/Plain/file1.ini', '/Plain/file2.ini', '/Plain/result.txt'],
+const plainReportFiles = [
+  ['/Complex/file1.json', '/Complex/file2.json', '/Result/plainDiff.txt'],
+  ['/Complex/file1.yaml', '/Complex/file2.yaml', '/Result/plainDiff.txt'],
+  ['/Complex/file1.ini', '/Complex/file2.ini', '/Result/plainDiff.txt'],
+].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
+
+const jsonReportFiles = [
+  ['/Complex/file1.json', '/Complex/file2.json', '/Result/jsonDiff.json'],
+  ['/Complex/file1.yaml', '/Complex/file2.yaml', '/Result/jsonDiff.json'],
+  ['/Complex/file1.ini', '/Complex/file2.ini', '/Result/jsonDiff.json'],
 ].reduce((acc, paths) => [...acc, generateTestData(...paths)], []);
 
 test.each(relativePathFiles)(
@@ -65,16 +71,23 @@ test.each(SimpleFiles)(
   },
 );
 
-test.each(recusiveFiles)(
+test.each(recusiveReportFiles)(
   'Should generate recursive report(%p, %p)',
   (a, b, expected) => {
     expect(genDiff(a, b)).toBe(expected);
   },
 );
 
-test.each(plainFiles)(
+test.each(plainReportFiles)(
   'Should generate plain report(%p, %p)',
   (a, b, expected) => {
     expect(genDiff(a, b, 'plain')).toBe(expected);
+  },
+);
+
+test.each(jsonReportFiles)(
+  'Should generate json report(%p, %p)',
+  (a, b, expected) => {
+    expect(genDiff(a, b, 'json')).toBe(expected);
   },
 );
