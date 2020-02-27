@@ -20,7 +20,7 @@ Recursive format report
 
 Plain format report
 
-[![asciicast](https://asciinema.org/a/zktELxwDb9J071uy6Zq8ek5ZQ.svg)](https://asciinema.org/a/zktELxwDb9J071uy6Zq8ek5ZQ)
+[![asciicast](https://asciinema.org/a/9NYJrvG6nM05j9XybJajBeI8u.svg)](https://asciinema.org/a/9NYJrvG6nM05j9XybJajBeI8u)
 
 Json format report
 
