@@ -60,7 +60,8 @@ const build = (oldFile, newFile) => {
 
   const oldFileKeys = Object.keys(oldFile);
   const newFileKeys = Object.keys(newFile);
-  const uniqKeys = _.uniq([...oldFileKeys, ...newFileKeys]);
+  const allKeys = _.union(oldFileKeys, newFileKeys);
+  const uniqKeys = _.uniq(allKeys);
   uniqKeys.sort();
   const diff = uniqKeys
     .reduce((acc, key) => [...acc, buildNode(oldFile, newFile, key)], [])
