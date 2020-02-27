@@ -1,7 +1,8 @@
+
+import fs from 'fs';
+import path from 'path';
 import genDiff from '..';
 
-const fs = require('fs');
-const path = require('path');
 
 const generateTestData = (path1, path2, resultPath, isRelative = false) => {
   const result = [
