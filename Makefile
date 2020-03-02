@@ -15,5 +15,7 @@ lint:
 	npx eslint .
 test:
 	npm run test
+test-coverage:
+	npm test -- --coverage
 watch:
 	npm run testWatch
