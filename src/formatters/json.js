@@ -1,53 +1,46 @@
 import _ from 'lodash';
 
-
 const renderNode = (node) => {
-  const {
-    status, children, key, oldValue, newValue,
-  } = node;
-  if (status === 'children') {
-    const processedChildren = `${_.flatten(children.map(child => renderNode(child))).join(',')}`;
-    return `{"${key}":{"children":[${processedChildren}]}}`;
-  }
-  if (status === 'unchanged') {
-    return JSON.stringify({
+  const renderActionsByStatus = {
+    children: ({ key, children }) => {
+      const processedChildren = `${_.flatten(children.map(child => renderNode(child))).join(',')}`;
+      const renderedNode = `{"${key}":{"children":[${processedChildren}]}}`;
+      return renderedNode;
+    },
+    added: ({ key, status, newValue }) => JSON.stringify({
+      [key]: {
+        status,
+        newValue,
+      },
+    }),
+    removed: ({ key, status, oldValue }) => JSON.stringify({
+      [key]: {
+        status,
+        oldValue,
+      },
+    }),
+    updated: ({
+      key, status, oldValue, newValue,
+    }) => JSON.stringify({
+      [key]: {
+        status,
+        oldValue,
+        newValue,
+      },
+    }),
+    unchanged: ({ key, status, newValue }) => JSON.stringify({
       [key]: {
         status,
         value: newValue,
       },
-    });
-  }
-  if (status === 'added') {
-    return JSON.stringify({
-      [key]: {
-        status,
-        newValue,
-      },
-    });
-  }
-  if (status === 'removed') {
-    return JSON.stringify({
-      [key]: {
-        status,
-        oldValue,
-      },
-    });
-  }
-  if (status === 'updated') {
-    return JSON.stringify({
-      [key]: {
-        status,
-        oldValue,
-        newValue,
-      },
-    });
-  }
-  return undefined;
+    }),
+  };
+  return renderActionsByStatus[node.status](node);
 };
 
 const render = (diff) => {
-  const result = `{"diff":[${_.flatten(diff.map(node => renderNode(node))).join(',')}]}`;
-  return result;
+  const renderedDiff = `{"diff":[${_.flatten(diff.map(node => renderNode(node))).join(',')}]}`;
+  return renderedDiff;
 };
 
 
