@@ -55,7 +55,7 @@ const buildDiffAst = (oldData, newData) => {
   const newDataKeys = Object.keys(newData);
   const keysUnion = _.union(oldDataKeys, newDataKeys).sort();
   const diff = keysUnion
-    .reduce((acc, key) => [...acc, buildNode(key)], []);
+    .map((key) => buildNode(key));
   return diff;
 };
 
