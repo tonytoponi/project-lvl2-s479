@@ -6,9 +6,8 @@ const stringify = (key, value, depth, sign) => {
   if (_.isObject(value)) {
     const keys = Object.keys(value);
     const objectDepth = depth + 3;
-    const stringifiedObjectFields = keys.map(k => `${step.repeat(objectDepth)}${k}: ${value[k]}`).join('\n');
-    const stringifiedObject = `${sign} ${key}: {\n${stringifiedObjectFields}\n${step.repeat(depth + 1)}}`;
-    return `${step.repeat(depth)}${stringifiedObject}`;
+    const stringifiedObject = keys.map(k => `${step.repeat(objectDepth)}${k}: ${value[k]}`).join('\n');
+    return `${step.repeat(depth)}${sign} ${key}: {\n${stringifiedObject}\n${step.repeat(depth + 1)}}`;
   }
   const stringlifiedLine = `${step.repeat(depth)}${sign} ${key}: ${value}`;
   return stringlifiedLine;

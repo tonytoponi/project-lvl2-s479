@@ -2,26 +2,26 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 
 
-const fileParsers = [
+const Parsers = [
   {
-    check: fileType => fileType === '.json',
+    check: type => type === '.json',
     parse: JSON.parse,
   },
   {
-    check: fileType => fileType === '.yaml',
+    check: type => type === '.yaml',
     parse: yaml.safeLoad,
   },
   {
-    check: fileType => fileType === '.ini',
+    check: type => type === '.ini',
     parse: ini.parse,
   },
 ];
 
-const selectParser = fileType => fileParsers.find(({ check }) => check(fileType));
+const selectParser = type => Parsers.find(({ check }) => check(type));
 
-const parse = (fileData, fileType) => {
-  const parser = selectParser(fileType);
-  const parsedData = parser.parse(fileData);
+const parse = (data, type) => {
+  const parser = selectParser(type);
+  const parsedData = parser.parse(data);
   return parsedData;
 };
 
