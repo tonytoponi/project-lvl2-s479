@@ -2,24 +2,24 @@ import _ from 'lodash';
 
 const typeFomatters = [
   {
-    check: value => _.isString(value),
-    generate: value => `'${value}'`,
+    check: (value) => _.isString(value),
+    generate: (value) => `'${value}'`,
   },
   {
-    check: value => _.isObject(value),
+    check: (value) => _.isObject(value),
     generate: () => '[complex value]',
   },
   {
     check: () => true,
-    generate: value => value,
+    generate: (value) => value,
   },
 ];
 
 const renderNode = (node, path = []) => {
   const renderActionsByStatus = {
     children: ({ key, children }) => {
-      const changedChildren = children.filter(child => child.status !== 'unchanged');
-      const processedChildren = changedChildren.map(child => renderNode(child, [...path, key]));
+      const changedChildren = children.filter((child) => child.status !== 'unchanged');
+      const processedChildren = changedChildren.map((child) => renderNode(child, [...path, key]));
       const renderedNode = `${_.flatten(processedChildren).join('\n')}`;
       return renderedNode;
     },
@@ -47,7 +47,7 @@ const renderNode = (node, path = []) => {
 
 const render = (diff) => {
   const changedNodes = diff.filter(({ status }) => status !== 'unchanged');
-  const renderedDiff = `${_.flatten(changedNodes.map(node => renderNode(node))).join('\n')}`;
+  const renderedDiff = `${_.flatten(changedNodes.map((node) => renderNode(node))).join('\n')}`;
   return renderedDiff;
 };
 
