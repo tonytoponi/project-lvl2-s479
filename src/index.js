@@ -12,8 +12,8 @@ const genDiff = (firstFilePath, secondFilePath, format = 'recursive') => {
   const secondFileType = extname(secondFilePath);
   const firstData = parse(firstFileData, firstFileType);
   const secondData = parse(secondFileData, secondFileType);
-  const diff = buildDiffAst(firstData, secondData);
-  const renderedDiff = render(diff, format);
+  const diffAst = buildDiffAst(firstData, secondData);
+  const renderedDiff = render(diffAst, format);
   return renderedDiff;
 };
 

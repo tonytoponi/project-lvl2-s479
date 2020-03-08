@@ -3,14 +3,14 @@ import plainRender from './plain';
 import jsonRender from './json';
 
 
-const render = (diff, format) => {
+const render = (diffAst, format) => {
   if (format === 'plain') {
-    return plainRender(diff);
+    return plainRender(diffAst);
   }
   if (format === 'json') {
-    return jsonRender(diff);
+    return jsonRender(diffAst);
   }
-  return recursiveRender(diff);
+  return recursiveRender(diffAst);
 };
 
 export default render;
