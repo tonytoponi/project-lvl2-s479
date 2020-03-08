@@ -19,7 +19,8 @@ const renderNode = (node, path = []) => {
   const renderActionsByStatus = {
     children: ({ key, children }) => {
       const changedChildren = children.filter(child => child.status !== 'unchanged');
-      const renderedNode = `${_.flatten(changedChildren.map(child => renderNode(child, [...path, key]))).join('\n')}`;
+      const processedChildren = changedChildren.map(child => renderNode(child, [...path, key]));
+      const renderedNode = `${_.flatten(processedChildren).join('\n')}`;
       return renderedNode;
     },
     added: ({ key, newValue }) => {

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { resolve, extname } from 'path';
 import parse from './parser';
-import build from './diffAstBuilder';
+import buildDiffAst from './diffAstBuilder';
 import render from './formatters';
 
 
@@ -10,9 +10,9 @@ const genDiff = (firstFilePath, secondFilePath, format = 'recursive') => {
   const firstFileType = extname(firstFilePath);
   const secondFileData = fs.readFileSync(resolve(secondFilePath), 'utf-8');
   const secondFileType = extname(secondFilePath);
-  const parsedFirstFile = parse(firstFileData, firstFileType);
-  const parsedSecondFile = parse(secondFileData, secondFileType);
-  const diff = build(parsedFirstFile, parsedSecondFile);
+  const firstData = parse(firstFileData, firstFileType);
+  const secondData = parse(secondFileData, secondFileType);
+  const diff = buildDiffAst(firstData, secondData);
   const renderedDiff = render(diff, format);
   return renderedDiff;
 };
