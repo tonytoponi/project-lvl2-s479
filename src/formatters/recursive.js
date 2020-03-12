@@ -3,47 +3,45 @@ import _ from 'lodash';
 const step = '  ';
 
 const stringify = (key, value, depth, sign) => {
-  if (_.isObject(value)) {
-    const keys = Object.keys(value);
-    const objectDepth = depth + 3;
-    const stringifiedObject = keys.map((k) => `${step.repeat(objectDepth)}${k}: ${value[k]}`).join('\n');
-    return `${step.repeat(depth)}${sign} ${key}: {\n${stringifiedObject}\n${step.repeat(depth + 1)}}`;
+  if (!_.isObject(value)) {
+    const stringlifiedLine = `${step.repeat(depth + 1)}${sign} ${key}: ${value}`;
+    return stringlifiedLine;
   }
-  const stringlifiedLine = `${step.repeat(depth)}${sign} ${key}: ${value}`;
-  return stringlifiedLine;
+  const keys = Object.keys(value);
+  const objectDepth = depth + 4;
+  const stringifiedObject = keys.map((k) => `${step.repeat(objectDepth)}${k}: ${value[k]}`).join('\n');
+  return `${step.repeat(depth + 1)}${sign} ${key}: {\n${stringifiedObject}\n${step.repeat(depth + 2)}}`;
 };
 
-const renderNode = (node, depth) => {
-  const renderActionsByStatus = {
-    children: ({ key, children }) => {
-      const processedChildren = _.flatten(children.map((child) => renderNode(child, depth + 2))).join('\n');
-      const renderedNode = `${step.repeat(depth + 1)}${key}: {\n${processedChildren}\n${step.repeat(depth + 1)}}`;
-      return renderedNode;
-    },
-    added: ({ key, newValue }) => {
-      const renderedNode = stringify(key, newValue, depth, '+');
-      return renderedNode;
-    },
-    removed: ({ key, oldValue }) => {
-      const renderedNode = stringify(key, oldValue, depth, '-');
-      return renderedNode;
-    },
-    updated: ({ key, oldValue, newValue }) => {
-      const oldLine = stringify(key, oldValue, depth, '-');
-      const newLine = stringify(key, newValue, depth, '+');
-      const renderedNode = [oldLine, newLine];
-      return renderedNode;
-    },
-    unchanged: ({ key, newValue }) => {
-      const renderedNode = stringify(key, newValue, depth, ' ');
-      return renderedNode;
-    },
+const render = (diff, diffKey = '', depth = 0) => {
+  const renderNode = (node) => {
+    const renderActionsByStatus = {
+      children: ({ key, children }) => {
+        const renderedChildren = render(children, `${key}: `, depth + 2);
+        return renderedChildren;
+      },
+      added: ({ key, newValue }) => {
+        const renderedNode = stringify(key, newValue, depth, '+');
+        return renderedNode;
+      },
+      removed: ({ key, oldValue }) => {
+        const renderedNode = stringify(key, oldValue, depth, '-');
+        return renderedNode;
+      },
+      updated: ({ key, oldValue, newValue }) => {
+        const oldLine = stringify(key, oldValue, depth, '-');
+        const newLine = stringify(key, newValue, depth, '+');
+        const renderedNode = [oldLine, newLine];
+        return renderedNode;
+      },
+      unchanged: ({ key, newValue }) => {
+        const renderedNode = stringify(key, newValue, depth, ' ');
+        return renderedNode;
+      },
+    };
+    return renderActionsByStatus[node.status](node);
   };
-  return renderActionsByStatus[node.status](node);
-};
-
-const render = (diff) => {
-  const renderedDiff = `{\n${_.flatten(diff.map((node) => renderNode(node, 1))).join('\n')}\n}`;
+  const renderedDiff = `${step.repeat(depth)}${diffKey}{\n${_.flatten(diff.map((node) => renderNode(node, 1))).join('\n')}\n${step.repeat(depth)}}`;
   return renderedDiff;
 };
 

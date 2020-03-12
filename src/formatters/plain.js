@@ -1,51 +1,37 @@
 import _ from 'lodash';
 
-const typeFomatters = [
-  {
-    check: (value) => _.isString(value),
-    generate: (value) => `'${value}'`,
-  },
-  {
-    check: (value) => _.isObject(value),
-    generate: () => '[complex value]',
-  },
-  {
-    check: () => true,
-    generate: (value) => value,
-  },
-];
+const stringlify = (value) => {
+  if (_.isString(value)) {
+    return `'${value}'`;
+  }
+  if (_.isObject(value)) {
+    return '[complex value]';
+  }
+  return value;
+};
 
-const renderNode = (node, path = []) => {
+const render = (diff, parentsKeys = []) => {
   const renderActionsByStatus = {
     children: ({ key, children }) => {
-      const changedChildren = children.filter((child) => child.status !== 'unchanged');
-      const processedChildren = changedChildren.map((child) => renderNode(child, [...path, key]));
-      const renderedNode = `${_.flatten(processedChildren).join('\n')}`;
-      return renderedNode;
+      const renderedChildren = render(children, [...parentsKeys, key]);
+      return renderedChildren;
     },
     added: ({ key, newValue }) => {
-      const { generate } = typeFomatters.find(({ check }) => check(newValue));
-      const formattedValue = generate(newValue);
-      const renderedNode = `Property '${[...path, key].join('.')}' was added with value: ${formattedValue}`;
+      const renderedNode = `Property '${[...parentsKeys, key].join('.')}' was added with value: ${stringlify(newValue)}`;
       return renderedNode;
     },
     removed: ({ key }) => {
-      const renderedNode = `Property '${[...path, key].join('.')}' was removed`;
+      const renderedNode = `Property '${[...parentsKeys, key].join('.')}' was removed`;
       return renderedNode;
     },
     updated: ({ key, oldValue, newValue }) => {
-      const { generate: generateNewValue } = typeFomatters.find(({ check }) => check(newValue));
-      const formattedNewValue = generateNewValue(newValue);
-      const { generate: generateOldValue } = typeFomatters.find(({ check }) => check(oldValue));
-      const formattedOldValue = generateOldValue(oldValue);
-      const renderedNode = `Property '${[...path, key].join('.')}' was updated. From ${formattedOldValue} to ${formattedNewValue}`;
+      const renderedNode = `Property '${[...parentsKeys, key].join('.')}' was updated. From ${stringlify(oldValue)} to ${stringlify(newValue)}`;
       return renderedNode;
     },
   };
-  return renderActionsByStatus[node.status](node);
-};
 
-const render = (diff) => {
+  const renderNode = (node) => renderActionsByStatus[node.status](node);
+
   const changedNodes = diff.filter(({ status }) => status !== 'unchanged');
   const renderedDiff = `${_.flatten(changedNodes.map((node) => renderNode(node))).join('\n')}`;
   return renderedDiff;
