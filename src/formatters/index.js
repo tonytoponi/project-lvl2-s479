@@ -2,15 +2,15 @@ import recursiveRender from './recursive';
 import plainRender from './plain';
 import jsonRender from './json';
 
+const renderByFormat = {
+  plain: plainRender,
+  json: jsonRender,
+  recursive: recursiveRender,
+};
 
 const render = (diffAst, format) => {
-  if (format === 'plain') {
-    return plainRender(diffAst);
-  }
-  if (format === 'json') {
-    return jsonRender(diffAst);
-  }
-  return recursiveRender(diffAst);
+  const renderedDiff = renderByFormat[format](diffAst);
+  return renderedDiff;
 };
 
 export default render;
