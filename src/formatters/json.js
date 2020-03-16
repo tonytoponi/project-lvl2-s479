@@ -1,9 +1,7 @@
-import _ from 'lodash';
-
 const renderNode = (node) => {
   const renderActionsByStatus = {
     children: ({ key, children }) => {
-      const processedChildren = _.flatten(children.map((child) => renderNode(child)));
+      const processedChildren = (children.map((child) => renderNode(child)));
       const renderedNode = ({ [key]: { children: processedChildren } });
       return renderedNode;
     },
@@ -18,7 +16,8 @@ const renderNode = (node) => {
 };
 
 const render = (diff) => {
-  const renderedDiff = JSON.stringify({ diff: _.flatten(diff.map((node) => renderNode(node))) });
+  const processedNodes = (diff.map((node) => renderNode(node)));
+  const renderedDiff = JSON.stringify({ diff: processedNodes });
   return renderedDiff;
 };
 

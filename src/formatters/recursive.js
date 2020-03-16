@@ -41,7 +41,8 @@ const render = (diff, diffKey = '', depth = 0) => {
     };
     return renderActionsByStatus[node.status](node);
   };
-  const renderedDiff = `${step.repeat(depth)}${diffKey}{\n${_.flatten(diff.map((node) => renderNode(node, 1))).join('\n')}\n${step.repeat(depth)}}`;
+  const renderedNodes = _.flatten(diff.map((node) => renderNode(node, 1))).join('\n');
+  const renderedDiff = `${step.repeat(depth)}${diffKey}{\n${renderedNodes}\n${step.repeat(depth)}}`;
   return renderedDiff;
 };
 

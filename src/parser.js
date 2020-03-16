@@ -7,7 +7,7 @@ const parsersByType = {
   ini: ini.parse,
 };
 
-const parse = ({ type, data }) => {
+const parse = (type, data) => {
   const parsedData = parsersByType[type](data);
   return parsedData;
 };
