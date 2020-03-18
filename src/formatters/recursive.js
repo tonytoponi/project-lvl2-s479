@@ -19,27 +19,14 @@ const stringifyNode = (nodekey, value, depth, sign) => {
 const render = (diff, diffKey = '', depth = 0) => {
   const renderNode = (node) => {
     const renderActionsByStatus = {
-      children: ({ key, children }) => {
-        const renderedChildren = render(children, `${key}: `, depth + 2);
-        return renderedChildren;
-      },
-      added: ({ key, newValue }) => {
-        const renderedNode = stringifyNode(key, newValue, depth, '+');
-        return renderedNode;
-      },
-      removed: ({ key, oldValue }) => {
-        const renderedNode = stringifyNode(key, oldValue, depth, '-');
-        return renderedNode;
-      },
+      children: ({ key, children }) => render(children, `${key}: `, depth + 2),
+      added: ({ key, newValue }) => stringifyNode(key, newValue, depth, '+'),
+      removed: ({ key, oldValue }) => stringifyNode(key, oldValue, depth, '-'),
+      unchanged: ({ key, newValue }) => stringifyNode(key, newValue, depth, ' '),
       updated: ({ key, oldValue, newValue }) => {
         const oldLine = stringifyNode(key, oldValue, depth, '-');
         const newLine = stringifyNode(key, newValue, depth, '+');
-        const renderedNode = [oldLine, newLine];
-        return renderedNode;
-      },
-      unchanged: ({ key, newValue }) => {
-        const renderedNode = stringifyNode(key, newValue, depth, ' ');
-        return renderedNode;
+        return [oldLine, newLine];
       },
     };
     return renderActionsByStatus[node.status](node);
