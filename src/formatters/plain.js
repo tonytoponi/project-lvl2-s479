@@ -17,15 +17,18 @@ const render = (diff, parentsKeys = []) => {
       return renderedChildren;
     },
     added: ({ key, newValue }) => {
-      const renderedNode = `Property '${[...parentsKeys, key].join('.')}' was added with value: ${stringlify(newValue)}`;
+      const propertyPath = [...parentsKeys, key].join('.');
+      const renderedNode = `Property '${propertyPath}' was added with value: ${stringlify(newValue)}`;
       return renderedNode;
     },
     removed: ({ key }) => {
-      const renderedNode = `Property '${[...parentsKeys, key].join('.')}' was removed`;
+      const propertyPath = [...parentsKeys, key].join('.');
+      const renderedNode = `Property '${propertyPath}' was removed`;
       return renderedNode;
     },
     updated: ({ key, oldValue, newValue }) => {
-      const renderedNode = `Property '${[...parentsKeys, key].join('.')}' was updated. From ${stringlify(oldValue)} to ${stringlify(newValue)}`;
+      const propertyPath = [...parentsKeys, key].join('.');
+      const renderedNode = `Property '${propertyPath}' was updated. From ${stringlify(oldValue)} to ${stringlify(newValue)}`;
       return renderedNode;
     },
   };
