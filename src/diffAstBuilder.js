@@ -3,37 +3,36 @@ import _ from 'lodash';
 const buildActions = [
   {
     check: ({ oldValue, newValue }) => _.isObject(oldValue) && _.isObject(newValue),
-    build: ({
-      key, oldValue, newValue, buildDiffAst,
-    }) => ({
-      key, status: 'children', children: buildDiffAst(oldValue, newValue),
+    build: ({ oldValue, newValue, buildDiffAst }) => ({
+      status: 'children', children: buildDiffAst(oldValue, newValue),
     }),
   },
   {
     check: ({ oldValue, newValue }) => _.isEqual(oldValue, newValue),
-    build: ({ key, newValue }) => ({ key, status: 'unchanged', value: newValue }),
+    build: ({ newValue }) => ({ status: 'unchanged', value: newValue }),
   },
   {
     check: ({ oldValue }) => _.isUndefined(oldValue),
-    build: ({ key, newValue }) => ({ key, status: 'added', newValue }),
+    build: ({ newValue }) => ({ status: 'added', newValue }),
   },
   {
     check: ({ newValue }) => _.isUndefined(newValue),
-    build: ({ key, oldValue }) => ({ key, status: 'removed', oldValue }),
+    build: ({ oldValue }) => ({ status: 'removed', oldValue }),
   },
   {
     check: ({ oldValue, newValue }) => !_.isEqual(oldValue, newValue),
-    build: ({ key, oldValue, newValue }) => ({
-      key, status: 'updated', oldValue, newValue,
+    build: ({ oldValue, newValue }) => ({
+      status: 'updated', oldValue, newValue,
     }),
   },
 ];
 
 const buildNode = (key, oldValue, newValue, buildDiffAst) => {
   const { build } = buildActions.find(({ check }) => check({ oldValue, newValue }));
-  const node = build({
+  const nodeData = build({
     key, oldValue, newValue, buildDiffAst,
   });
+  const node = _.assign({ key }, nodeData);
   return node;
 };
 
