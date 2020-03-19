@@ -29,7 +29,7 @@ const render = (diff, depth = 0) => {
         return [oldLine, newLine];
       },
     };
-    return renderActionsByStatus[node.status](node, render);
+    return renderActionsByStatus[node.status](node);
   };
   const renderedNodes = _.flatten(diff.map(renderNode)).join('\n');
   const renderedDiff = `{\n${renderedNodes}\n${step.repeat(depth)}}`;
