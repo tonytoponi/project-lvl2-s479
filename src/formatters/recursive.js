@@ -29,9 +29,9 @@ const render = (diff, depth = 0) => {
         return [oldLine, newLine];
       },
     };
-    return renderActionsByStatus[node.status](node);
+    return renderActionsByStatus[node.status](node, render);
   };
-  const renderedNodes = _.flatten(diff.map((node) => renderNode(node, 1))).join('\n');
+  const renderedNodes = _.flatten(diff.map(renderNode)).join('\n');
   const renderedDiff = `{\n${renderedNodes}\n${step.repeat(depth)}}`;
   return renderedDiff;
 };
