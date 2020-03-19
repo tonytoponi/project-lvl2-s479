@@ -36,7 +36,7 @@ const render = (diff, parentsKeys = []) => {
   const renderNode = (node) => renderActionsByStatus[node.status](node);
 
   const changedNodes = diff.filter(({ status }) => status !== 'unchanged');
-  const renderedDiff = `${_.flatten(changedNodes.map(renderNode)).join('\n')}`;
+  const renderedDiff = _.flatten(changedNodes.map(renderNode)).join('\n');
   return renderedDiff;
 };
 

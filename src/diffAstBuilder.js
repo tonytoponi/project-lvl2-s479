@@ -1,51 +1,49 @@
 import _ from 'lodash';
 
-const statuses = [
+const buildActions = [
   {
-    check: ([v1, v2]) => v1 instanceof Object && v2 instanceof Object,
-    status: 'children',
+    check: ({ oldValue, newValue }) => _.isObject(oldValue) && _.isObject(newValue),
+    build: ({
+      key, oldValue, newValue, buildDiffAst,
+    }) => ({
+      key, status: 'children', children: buildDiffAst(oldValue, newValue),
+    }),
   },
   {
-    check: ([v1, v2]) => Object.is(v1, v2),
-    status: 'unchanged',
+    check: ({ oldValue, newValue }) => _.isEqual(oldValue, newValue),
+    build: ({ key, newValue }) => ({ key, status: 'unchanged', value: newValue }),
   },
   {
-    check: ([v1]) => typeof v1 === 'undefined',
-    status: 'added',
+    check: ({ oldValue }) => _.isUndefined(oldValue),
+    build: ({ key, newValue }) => ({ key, status: 'added', newValue }),
   },
   {
-    check: ([, v2]) => typeof v2 === 'undefined',
-    status: 'removed',
+    check: ({ newValue }) => _.isUndefined(newValue),
+    build: ({ key, oldValue }) => ({ key, status: 'removed', oldValue }),
   },
   {
-    check: ([v1, v2]) => !Object.is(v1, v2),
-    status: 'updated',
+    check: ({ oldValue, newValue }) => !_.isEqual(oldValue, newValue),
+    build: ({ key, oldValue, newValue }) => ({
+      key, status: 'updated', oldValue, newValue,
+    }),
   },
 ];
 
+const buildNode = (key, oldValue, newValue, buildDiffAst) => {
+  const { build } = buildActions.find(({ check }) => check({ oldValue, newValue }));
+  const node = build({
+    key, oldValue, newValue, buildDiffAst,
+  });
+  return node;
+};
+
 const buildDiffAst = (oldData, newData) => {
-  const buildNode = (key) => {
-    const oldValue = oldData[key];
-    const newValue = newData[key];
-    const { status } = statuses.find(({ check }) => check([oldValue, newValue]));
-    if (status === 'children') {
-      const node = {
-        status,
-        key,
-        children: buildDiffAst(oldValue, newValue),
-      };
-      return node;
-    }
-    const node = {
-      status, key, oldValue, newValue,
-    };
-    return node;
-  };
   const oldDataKeys = Object.keys(oldData);
   const newDataKeys = Object.keys(newData);
   const keysUnion = _.union(oldDataKeys, newDataKeys).sort();
-  const diff = keysUnion.map(buildNode);
-  return diff;
+  const buildNodeByKey = (key) => buildNode(key, oldData[key], newData[key], buildDiffAst);
+  const diffAst = keysUnion.map(buildNodeByKey);
+  return diffAst;
 };
 
 

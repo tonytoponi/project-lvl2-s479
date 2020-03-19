@@ -16,13 +16,13 @@ const stringifyNode = (nodekey, value, depth, sign) => {
   return stringifiedNode;
 };
 
-const render = (diff, diffKey = '', depth = 0) => {
+const render = (diff, depth = 0) => {
   const renderNode = (node) => {
     const renderActionsByStatus = {
-      children: ({ key, children }) => render(children, `${key}: `, depth + 2),
+      children: ({ key, children }) => `${step.repeat(depth + 2)}${key}: ${render(children, depth + 2)}`,
       added: ({ key, newValue }) => stringifyNode(key, newValue, depth, '+'),
       removed: ({ key, oldValue }) => stringifyNode(key, oldValue, depth, '-'),
-      unchanged: ({ key, newValue }) => stringifyNode(key, newValue, depth, ' '),
+      unchanged: ({ key, value }) => stringifyNode(key, value, depth, ' '),
       updated: ({ key, oldValue, newValue }) => {
         const oldLine = stringifyNode(key, oldValue, depth, '-');
         const newLine = stringifyNode(key, newValue, depth, '+');
@@ -32,7 +32,7 @@ const render = (diff, diffKey = '', depth = 0) => {
     return renderActionsByStatus[node.status](node);
   };
   const renderedNodes = _.flatten(diff.map((node) => renderNode(node, 1))).join('\n');
-  const renderedDiff = `${step.repeat(depth)}${diffKey}{\n${renderedNodes}\n${step.repeat(depth)}}`;
+  const renderedDiff = `{\n${renderedNodes}\n${step.repeat(depth)}}`;
   return renderedDiff;
 };
 
