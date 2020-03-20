@@ -10,31 +10,18 @@ const stringlify = (value) => {
   return value;
 };
 
+const renderActionsByStatus = {
+  children: (propertyPath, { children }, render) => render(children, propertyPath),
+  added: (propertyPath, { newValue }) => `Property '${propertyPath.join('.')}' was added with value: ${stringlify(newValue)}`,
+  removed: (propertyPath) => `Property '${propertyPath.join('.')}' was removed`,
+  updated: (propertyPath, { oldValue, newValue }) => `Property '${propertyPath.join('.')}' was updated. From ${stringlify(oldValue)} to ${stringlify(newValue)}`,
+};
+
 const render = (diff, parentsKeys = []) => {
-  const renderActionsByStatus = {
-    children: ({ key, children }) => {
-      const renderedChildren = render(children, [...parentsKeys, key]);
-      return renderedChildren;
-    },
-    added: ({ key, newValue }) => {
-      const propertyPath = [...parentsKeys, key].join('.');
-      const renderedNode = `Property '${propertyPath}' was added with value: ${stringlify(newValue)}`;
-      return renderedNode;
-    },
-    removed: ({ key }) => {
-      const propertyPath = [...parentsKeys, key].join('.');
-      const renderedNode = `Property '${propertyPath}' was removed`;
-      return renderedNode;
-    },
-    updated: ({ key, oldValue, newValue }) => {
-      const propertyPath = [...parentsKeys, key].join('.');
-      const renderedNode = `Property '${propertyPath}' was updated. From ${stringlify(oldValue)} to ${stringlify(newValue)}`;
-      return renderedNode;
-    },
+  const renderNode = (node) => {
+    const propertyPath = [...parentsKeys, node.key];
+    return renderActionsByStatus[node.status](propertyPath, node, render);
   };
-
-  const renderNode = (node) => renderActionsByStatus[node.status](node);
-
   const changedNodes = diff.filter(({ status }) => status !== 'unchanged');
   const renderedDiff = _.flatten(changedNodes.map(renderNode)).join('\n');
   return renderedDiff;
