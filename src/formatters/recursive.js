@@ -1,11 +1,11 @@
-import _ from 'lodash';
+import { isObject, flatten } from 'lodash';
 
 const step = '  ';
 
 const stringlifyLine = (key, value, depth, sign = ' ') => `${step.repeat(depth)}${sign} ${key}: ${value}`;
 
 const stringifyNode = (nodekey, value, depth, sign) => {
-  if (!_.isObject(value)) {
+  if (!isObject(value)) {
     const stringifiedNode = stringlifyLine(nodekey, value, depth + 1, sign);
     return stringifiedNode;
   }
@@ -17,7 +17,7 @@ const stringifyNode = (nodekey, value, depth, sign) => {
 };
 
 const renderActionsByStatus = {
-  children: ({ key, children }, depth, render) => `${step.repeat(depth + 2)}${key}: ${render(children, depth + 2)}`,
+  nested: ({ key, children }, depth, render) => `${step.repeat(depth + 2)}${key}: ${render(children, depth + 2)}`,
   added: ({ key, newValue }, depth) => stringifyNode(key, newValue, depth, '+'),
   removed: ({ key, oldValue }, depth) => stringifyNode(key, oldValue, depth, '-'),
   unchanged: ({ key, value }, depth) => stringifyNode(key, value, depth, ' '),
@@ -30,7 +30,7 @@ const renderActionsByStatus = {
 
 const render = (diff, depth = 0) => {
   const renderNode = (node) => renderActionsByStatus[node.status](node, depth, render);
-  const renderedNodes = _.flatten(diff.map(renderNode)).join('\n');
+  const renderedNodes = flatten(diff.map(renderNode)).join('\n');
   const renderedDiff = `{\n${renderedNodes}\n${step.repeat(depth)}}`;
   return renderedDiff;
 };

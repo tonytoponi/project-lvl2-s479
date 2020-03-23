@@ -1,26 +1,28 @@
-import _ from 'lodash';
+import {
+  isObject, isUndefined, isEqual, union,
+} from 'lodash';
 
 const buildActions = [
   {
-    check: ({ oldValue, newValue }) => _.isObject(oldValue) && _.isObject(newValue),
+    check: ({ oldValue, newValue }) => isObject(oldValue) && isObject(newValue),
     build: ({ oldValue, newValue, buildDiffAst }) => ({
-      status: 'children', children: buildDiffAst(oldValue, newValue),
+      status: 'nested', children: buildDiffAst(oldValue, newValue),
     }),
   },
   {
-    check: ({ oldValue, newValue }) => _.isEqual(oldValue, newValue),
+    check: ({ oldValue, newValue }) => isEqual(oldValue, newValue),
     build: ({ newValue }) => ({ status: 'unchanged', value: newValue }),
   },
   {
-    check: ({ oldValue }) => _.isUndefined(oldValue),
+    check: ({ oldValue }) => isUndefined(oldValue),
     build: ({ newValue }) => ({ status: 'added', newValue }),
   },
   {
-    check: ({ newValue }) => _.isUndefined(newValue),
+    check: ({ newValue }) => isUndefined(newValue),
     build: ({ oldValue }) => ({ status: 'removed', oldValue }),
   },
   {
-    check: ({ oldValue, newValue }) => !_.isEqual(oldValue, newValue),
+    check: ({ oldValue, newValue }) => !isEqual(oldValue, newValue),
     build: ({ oldValue, newValue }) => ({
       status: 'updated', oldValue, newValue,
     }),
@@ -32,14 +34,14 @@ const buildNode = (key, oldValue, newValue, buildDiffAst) => {
   const nodeData = build({
     key, oldValue, newValue, buildDiffAst,
   });
-  const node = _.assign({ key }, nodeData);
+  const node = { key, ...nodeData };
   return node;
 };
 
 const buildDiffAst = (oldData, newData) => {
   const oldDataKeys = Object.keys(oldData);
   const newDataKeys = Object.keys(newData);
-  const keysUnion = _.union(oldDataKeys, newDataKeys).sort();
+  const keysUnion = union(oldDataKeys, newDataKeys).sort();
   const buildNodeByKey = (key) => buildNode(key, oldData[key], newData[key], buildDiffAst);
   const diffAst = keysUnion.map(buildNodeByKey);
   return diffAst;

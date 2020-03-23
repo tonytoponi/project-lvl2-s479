@@ -1,17 +1,17 @@
-import _ from 'lodash';
+import { isString, isObject, flatten } from 'lodash';
 
 const stringlify = (value) => {
-  if (_.isString(value)) {
+  if (isString(value)) {
     return `'${value}'`;
   }
-  if (_.isObject(value)) {
+  if (isObject(value)) {
     return '[complex value]';
   }
   return value;
 };
 
 const renderActionsByStatus = {
-  children: (propertyPath, { children }, render) => render(children, propertyPath),
+  nested: (propertyPath, { children }, render) => render(children, propertyPath),
   added: (propertyPath, { newValue }) => `Property '${propertyPath.join('.')}' was added with value: ${stringlify(newValue)}`,
   removed: (propertyPath) => `Property '${propertyPath.join('.')}' was removed`,
   updated: (propertyPath, { oldValue, newValue }) => `Property '${propertyPath.join('.')}' was updated. From ${stringlify(oldValue)} to ${stringlify(newValue)}`,
@@ -23,7 +23,7 @@ const render = (diff, parentsKeys = []) => {
     return renderActionsByStatus[node.status](propertyPath, node, render);
   };
   const changedNodes = diff.filter(({ status }) => status !== 'unchanged');
-  const renderedDiff = _.flatten(changedNodes.map(renderNode)).join('\n');
+  const renderedDiff = flatten(changedNodes.map(renderNode)).join('\n');
   return renderedDiff;
 };
 
